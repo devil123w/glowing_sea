@@ -1,0 +1,68 @@
+[gd_scene load_steps=11 format=3 uid="uid://bcacw3psmacg0"]
+
+[ext_resource type="Shader" path="res://shader/Ocean.gdshader" id="1_705xr"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_225pq"]
+subdivide_width = 99
+subdivide_depth = 99
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kfsif"]
+seed = 480
+frequency = 0.0133
+fractal_type = 2
+fractal_gain = -0.47
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sg52y"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_kfsif")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_c2pls"]
+seed = 2775
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1axf5"]
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_c2pls")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0h62q"]
+seed = 800
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_lt56t"]
+seamless = true
+noise = SubResource("FastNoiseLite_0h62q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vnkto"]
+render_priority = 0
+shader = ExtResource("1_705xr")
+shader_parameter/albedo_base = Color(0.560784, 0.556863, 0.486275, 1)
+shader_parameter/albedo_shallow = Color(0.188235, 0.376471, 0.270588, 1)
+shader_parameter/matallic = 0.369
+shader_parameter/roughness = 0.455
+shader_parameter/wave_direction_normal_1 = Vector2(2, 0)
+shader_parameter/wave_direction_normal_2 = Vector2(2, 0)
+shader_parameter/timescale = 0.05
+shader_parameter/normal_blending = 0.5
+shader_parameter/fersnel_amount = 5.0
+shader_parameter/noise_scale = 10.0
+shader_parameter/height_sacle = 0.12
+shader_parameter/color_deep = null
+shader_parameter/color_shallow = Color(0.631373, 0.627451, 0.709804, 1)
+shader_parameter/beers_law_power = 2.0
+shader_parameter/depth_offset = 1.245
+shader_parameter/normal_1 = SubResource("NoiseTexture2D_sg52y")
+shader_parameter/normal_2 = SubResource("NoiseTexture2D_1axf5")
+shader_parameter/wave = SubResource("NoiseTexture2D_lt56t")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rthl8"]
+
+[node name="Ocean" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0943255, -0.0156447, -0.00535062)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_225pq")
+surface_material_override/0 = SubResource("ShaderMaterial_vnkto")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00041008, -0.635303, 0.0277491)
+mesh = SubResource("CylinderMesh_rthl8")
